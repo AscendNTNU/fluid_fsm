@@ -11,25 +11,35 @@
 #include "fluid.h"
 #include "util.h"
 
-Operation::Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish)
+Operation::Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish, const bool& isGlobal)
                                         : identifier(identifier), steady(steady), autoPublish(autoPublish){
-    pose_subscriber = node_handle.subscribe("mavros/local_position/pose", 1, &Operation::poseCallback, this);
-    twist_subscriber =
-        node_handle.subscribe("mavros/local_position/velocity_local", 1, &Operation::twistCallback, this);
+    
+    
 
+    global_pose_subscriber = node_handle.subscribe("mavros/global_position/global", 1, &Operation::globalPoseCallback, this);
+    pose_subscriber = node_handle.subscribe("mavros/global_position/local", 1, &Operation::poseCallback, this);
     setpoint_publisher = node_handle.advertise<mavros_msgs::PositionTarget>("mavros/setpoint_raw/local", 10);
+    global_setpoint_publisher = node_handle.advertise<mavros_msgs::PositionTarget>("mavros/setpoint_raw/local",10);
     setpoint.coordinate_frame = mavros_msgs::PositionTarget::FRAME_LOCAL_NED;
     rate_int = (int) Fluid::getInstance().configuration.refresh_rate;
+    twist_subscriber = node_handle.subscribe("mavros/local_position/velocity_local", 1, &Operation::twistCallback, this);
+
+
 }
 
 
 geometry_msgs::PoseStamped Operation::getCurrentPose() const { return current_pose; }
+
+sensor_msgs::NavSatFix Operation::getGlobalPose() const { return global_current_pose; }
 
 void Operation::poseCallback(const geometry_msgs::PoseStampedConstPtr pose) {
     current_pose.pose = pose->pose;
     current_pose.header = pose->header;
     current_accel = orientation_to_acceleration(pose->pose.orientation);
 }
+
+void Operation::globalPoseCallback(const sensor_msgs::NavSatFix global_pose_t){ global_current_pose = global_pose_t;}
+
 
 geometry_msgs::TwistStamped Operation::getCurrentTwist() const { return current_twist; }
 
@@ -65,7 +75,13 @@ float Operation::getCurrentYaw() const {
 }
 
 void Operation::publishSetpoint() { 
-    setpoint_publisher.publish(setpoint); 
+    if(isGlobal){
+        global_setpoint_publisher.publish(global_setpoint);
+    }
+    else{
+        setpoint_publisher.publish(setpoint); 
+    }
+         
 }
 
 void Operation::perform(std::function<bool(void)> should_tick, bool should_halt_if_steady) {

@@ -8,6 +8,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TwistStamped.h>
 #include <mavros_msgs/PositionTarget.h>
+#include <sensor_msgs/NavSatFix.h> //Global msg type
 #include <ros/ros.h>
 
 #include <memory>
@@ -22,15 +23,36 @@
  */
 class Operation {
    private:
+
+    const bool& isGlobal = 0; // Is operation Global
+
     /**
      * @brief Gets the current pose.
      */
     ros::Subscriber pose_subscriber;
 
+
+    //Global pose subscriber
+    ros::Subscriber global_pose_subscriber;
+    
+
+
+    
+
+
     /**
      * @brief Current pose.
      */
     geometry_msgs::PoseStamped current_pose;
+
+    //Current global pose
+    sensor_msgs::NavSatFix global_current_pose;
+    
+    
+
+
+
+
 
     /**
      * @brief Callback for current pose.
@@ -38,6 +60,8 @@ class Operation {
      * @param pose Pose retrieved from the callback.
      */
     void poseCallback(const geometry_msgs::PoseStampedConstPtr pose);
+
+    void globalPoseCallback(sensor_msgs::NavSatFix global_pose_t);
 
     /**
      * @brief Gets the current twist.
@@ -87,6 +111,8 @@ class Operation {
      *
      */
     ros::Publisher setpoint_publisher;
+    ros::Publisher global_setpoint_publisher;
+
 
     /**
      * @brief Used to construct the subscribers.
@@ -97,6 +123,7 @@ class Operation {
      * @brief The setpoint.
      */
     mavros_msgs::PositionTarget setpoint;
+    mavros_msgs::PositionTarget global_setpoint;
 
     /**
      * @brief Publishes the setpoint.
@@ -122,6 +149,9 @@ class Operation {
      * @return The current pose.
      */
     geometry_msgs::PoseStamped getCurrentPose() const;
+
+    sensor_msgs::NavSatFix getGlobalPose() const;
+
 
     /**
      * @return The current twist.
