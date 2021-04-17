@@ -17,17 +17,17 @@
 class MavrosInterface {
    private:
     /**
-     * @brief How fast the mavros interface will check for state changes when setting new modes in PX4.
+     * @brief How fast the mavros interface will check for state changes when setting new modes in Ardupilot.
      */
     const unsigned int UPDATE_REFRESH_RATE = 5;
 
     /**
-     * @brief Retrieves the state changes within PX4.
+     * @brief Retrieves the state changes within Ardupilot.
      */
     ros::Subscriber state_subscriber;
 
     /**
-     * @brief Current state of PX4.
+     * @brief Current state of Ardupilot.
      */
     mavros_msgs::State current_state;
 
@@ -37,7 +37,7 @@ class MavrosInterface {
     ros::Publisher setpoint_publisher;
 
     /**
-     * @brief Callback for the state within PX4.
+     * @brief Callback for the state within Ardupilot.
      *
      * @param msg The state message.
      */
@@ -50,7 +50,7 @@ class MavrosInterface {
     MavrosInterface();
 
     /**
-     * @return The current state gotten from PX4 through mavros.
+     * @return The current state gotten from Ardupilot through mavros.
      */
     mavros_msgs::State getCurrentState() const;
 
@@ -60,7 +60,7 @@ class MavrosInterface {
     void establishContactToArduPilot() const;
 
     /**
-     * @brief Will attempt to set the @p mode if PX4 is not already in the given mode.
+     * @brief Will attempt to set the @p mode if Ardupilot is not already in the given mode.
      *
      * @param mode The mode to attempt to set.
      *
@@ -69,7 +69,7 @@ class MavrosInterface {
     bool attemptToSetMode(const std::string& mode) const;
 
     /**
-     * @brief Requests PX4 to arm.
+     * @brief Requests Ardupilot to arm.
      *
      * @param auto_arm Will arm automatically if set to true, if not it'll wait until an arm signal is
      *                 retrieved from the RC.
@@ -78,7 +78,7 @@ class MavrosInterface {
 
 
     /**
-     * @brief Requests PX4 to go into offboard mode.
+     * @brief Requests Ardupilot to go into offboard mode.
      *
      * @param auto_offboard Will go into offboard mode automatically if set to true, if not it'll wait until
      *                      offboard flight mode is set from RC.
@@ -93,7 +93,7 @@ class MavrosInterface {
     void requestTakeOff(mavros_msgs::PositionTarget height) const;
 
     /**
-     * @brief Sets a parameter within PX4.
+     * @brief Sets a parameter within Ardupilot.
      *
      * @param parameter The parameter to set.
      * @param value The new value.

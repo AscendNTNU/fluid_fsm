@@ -8,8 +8,8 @@
 #include <map>
 #include <string>
 
-const std::string PX4_MODE_OFFBOARD = "GUIDED";
-const std::string PX4_MODE_LAND = "LAND"; //cahnged from AUTO.LAND to LAND for ardupilot  
+const std::string ARDUPILOT_MODE_GUIDED = "GUIDED";
+const std::string ARDUPILOT_MODE_LAND = "LAND"; //cahnged from AUTO.LAND to LAND for ardupilot  
 
 /**
  * @brief Represents the different operations.
@@ -26,13 +26,13 @@ enum class OperationIdentifier {
 };
 
 /**
- * @brief Retrieves the PX4 mode for a given @p operation_identifier.
+ * @brief Retrieves the Ardupilot mode for a given @p operation_identifier.
  *
- * @param operation_identifier The operation identifier to get the PX4 mode for.
+ * @param operation_identifier The operation identifier to get the Ardupilot mode for.
  *
- * @return The PX4 mode.
+ * @return The Ardupilot mode.
  */
-std::string getPX4ModeForOperationIdentifier(const OperationIdentifier& operation_identifier);
+std::string getArdupilotModeForOperationIdentifier(const OperationIdentifier& operation_identifier);
 
 /**
  * @brief Get a string from the @p operation_identifier.

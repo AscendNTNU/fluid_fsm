@@ -115,9 +115,9 @@ std::shared_ptr<Operation> Fluid::performOperationTransition(std::shared_ptr<Ope
     ros::Rate rate(Fluid::getInstance().configuration.refresh_rate);
     MavrosInterface mavros_interface;
 
-    // Loop until the PX4 mode is set.
-    const std::string target_operation_px4_mode = getPX4ModeForOperationIdentifier(target_operation_ptr->identifier);
-    while (ros::ok() && !mavros_interface.attemptToSetMode(target_operation_px4_mode)) {
+    // Loop until the Ardupilot mode is set.
+    const std::string target_operation_ardupilot_mode = getArdupilotModeForOperationIdentifier(target_operation_ptr->identifier);
+    while (ros::ok() && !mavros_interface.attemptToSetMode(target_operation_ardupilot_mode)) {
         ros::spinOnce();
         rate.sleep();
     }
@@ -195,8 +195,8 @@ void Fluid::run() {
 
         if (current_operation_ptr) {
             getStatusPublisherPtr()->status.current_operation = current_operation;
-            getStatusPublisherPtr()->status.px4_mode =
-                getPX4ModeForOperationIdentifier(current_operation_ptr->identifier);
+            getStatusPublisherPtr()->status.ardupilot_mode =
+                getArdupilotModeForOperationIdentifier(current_operation_ptr->identifier);
 
             current_operation_ptr->perform([&]() -> bool { return !got_new_operation; },
                                            operation_execution_queue.empty());

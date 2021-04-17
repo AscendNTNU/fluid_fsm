@@ -1,6 +1,6 @@
 # Type masks 
 
-*A topic of numerous of bugs within PX4.* 
+*A topic of numerous of bugs within Ardupilot.* 
 
 Type masks specify what the Pixhawk should regulate. When we're sending a PositionTarget via Mavros (on the topic 
 "mavros/setpoint_raw/local"), one of the fields in that type is the type mask (http://docs.ros.org/api/mavros_msgs/html/msg/PositionTarget.html). The type mask is a flag where one can say that the Pixhawk should ignore the velocity 

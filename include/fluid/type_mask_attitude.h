@@ -8,7 +8,7 @@
 #include <cstdint>
 
 /**
- * @brief Represents bitmasks for different kind of attitude control within both Ardupilot or PX4 when setting a setpoint.
+ * @brief Represents bitmasks for different kind of attitude control within both Ardupilot or Ardupilot when setting a setpoint.
  */
 class TypeMaskAttidute {
    public:

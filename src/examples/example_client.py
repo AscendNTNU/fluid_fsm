@@ -12,7 +12,7 @@ take_off = rospy.ServiceProxy('fluid/take_off', TakeOff)
 explore = rospy.ServiceProxy('fluid/explore', Explore)
 travel = rospy.ServiceProxy('fluid/travel', Travel)
 land = rospy.ServiceProxy('fluid/land', Land)
-Interact = rospy.ServiceProxy('fluid/interact', Interact)
+interact = rospy.ServiceProxy('fluid/interact', Interact)
 
 finished_operation = ""
 is_executing_operation = False
@@ -81,7 +81,7 @@ def main():
         rospy.logerr("Did not get connection with Fluid's services, is Fluid running?")
 
     # Perform a take off to 3 meters above ground
-    take_off_response = take_off(2)
+    take_off_response = take_off(20)
     is_executing_operation = True
 
     # Checks if the operation request was successful
@@ -100,8 +100,8 @@ def main():
         if not is_executing_operation:
             if finished_operation == "TAKE_OFF":
                 # Perform a explore with a (list of) point(s)
-                #response = explore([Point(0, 10, 2), Point(0, -10, 2)], Point(5, 5, 5))
-                response = explore(explore_points, Point(0, -10, 2))
+                response = explore([Point(0, 0, 20), Point(0, 5, 2), Point(5, 0,2)], Point(2, 2, 2))
+                #response = explore(explore_points, Point(0, -10, 2))
                 if (not response.success):
                     rospy.logerr(response.message)
                 else:
@@ -109,7 +109,7 @@ def main():
             elif finished_operation == "EXPLORE":
                 # Perform a the extraction module state using a LQR to follow the mast
                 print("LET US EXTRACT THAT MODULE !!\n")
-                response = interact(0.0)
+                response = interact(math.pi/20, 1.5)
                 if (not response.success):
                     rospy.logerr(response.message)
                 else:

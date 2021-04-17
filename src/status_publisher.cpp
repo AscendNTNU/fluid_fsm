@@ -2,8 +2,8 @@
 
 StatusPublisher::StatusPublisher() {
     status.armed = 0;
-    status.linked_with_px4 = 0;
-    status.px4_mode = "none";
+    status.linked_with_ardupilot = 0;
+    status.ardupilot_mode = "none";
     status.current_operation = "none";
 
     pose_subscriber = node_handle.subscribe("mavros/local_position/pose", 1, &StatusPublisher::poseCallback, this);

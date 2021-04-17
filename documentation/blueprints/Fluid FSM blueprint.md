@@ -43,19 +43,19 @@ In short, what the finite state machine requires:
 ## Technical implementation
 
 ### States
-Building on ROS and PX4, a state should encapsulate:
+Building on ROS and Ardupilot, a state should encapsulate:
 - a pose
 - an action
 - callbacks for when a state begins execution and when a state is finished executing
 
 #### Different types of states
 
-- Manual (PX4: MANUAL/STABILIZED)
+- Manual (Ardupilot: MANUAL/STABILIZED)
 - Idle (armed, but stationary at ground)
-- Take off (PX4: MIS_TAKEOFF_ALT)
-- Hold (hovers at current position, PX4: AUTO_LOITER)
-- Move (PX4: OFFBOARD)
-- Land (lands at the current position, PX4: AUTO_RTL)
+- Take off (Ardupilot: MIS_TAKEOFF_ALT)
+- Hold (hovers at current position, Ardupilot: AUTO_LOITER)
+- Move (Ardupilot: GUIDED)
+- Land (lands at the current position, Ardupilot: AUTO_RTL)
 - Kill (death switch for the judges)
 
 ### Transition
@@ -63,7 +63,7 @@ A transition is just a state change, so the essentials are:
 - Start state
 - End state
 - Completion callback with errors (if any)
-- Communication with the FSM on PX4
+- Communication with the FSM on Ardupilot
 
 
 ### Operation
@@ -132,23 +132,23 @@ Then the .msg files are generated with genaction.py.
 A transition is just a state change. In order to make this as flexible as possible it's natural to implement some sort
 of graph for the different states and run through this and check if a certain transition is allowed or not.
 
-It's important to notice in this design the transitions don't care if the state change is valid or not. If PX4
+It's important to notice in this design the transitions don't care if the state change is valid or not. If Ardupilot
 complains, the transition completion handler will return an error of course, but **the state graph is responsible
 for figuring out which transitions that are valid**. Therefore will transitions most likely be a private API
 for Fluid, while operations are public.
 
 
 ### TL;DR
-Fluid will have operations which you can call (using action lib) and these operations encapsulates states and transitions. The transitions manage flight mode changes in PX4.
+Fluid will have operations which you can call (using action lib) and these operations encapsulates states and transitions. The transitions manage flight mode changes in Ardupilot.
 
 
-## Communication with the FSM in PX4
-Transitions will take care of switching between different flight modes in PX4.
+## Communication with the FSM in Ardupilot
+Transitions will take care of switching between different flight modes in Ardupilot.
 
 ### Error handling
 If an error occurs it's the transition's job to pass this error further to the completion handler. In Fluid this will
 end up at the operation. This should not happen of course, as the state graph should be designed in such a way that
-every valid transition in the graph is also valid in PX4. But if an error occurs, there should be a set of methods for
+every valid transition in the graph is also valid in Ardupilot. But if an error occurs, there should be a set of methods for
 dealing with them. E.g.:
 - Wait and try after a short interval
 

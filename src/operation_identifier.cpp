@@ -1,11 +1,11 @@
 #include "operation_identifier.h"
 
-std::string getPX4ModeForOperationIdentifier(const OperationIdentifier& operation_identifier) {
+std::string getArdupilotModeForOperationIdentifier(const OperationIdentifier& operation_identifier) {
     switch (operation_identifier) {
         case OperationIdentifier::LAND:
-            return PX4_MODE_LAND;
+            return ARDUPILOT_MODE_LAND;
         default:
-            return PX4_MODE_OFFBOARD;
+            return ARDUPILOT_MODE_GUIDED;
     }
 }
 
