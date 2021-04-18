@@ -9,7 +9,7 @@
 #include "util.h"
 
 TakeOffOperation::TakeOffOperation(float height_setpoint)
-    : Operation(OperationIdentifier::TAKE_OFF, false, true), height_setpoint(height_setpoint) {}
+    : Operation(OperationIdentifier::TAKE_OFF, false, true, true), height_setpoint(height_setpoint) {}
 
 bool TakeOffOperation::hasFinishedExecution() const {
     const float distance_threshold = Fluid::getInstance().configuration.distance_completion_threshold;

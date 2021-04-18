@@ -11,8 +11,8 @@
 #include "fluid.h"
 #include "util.h"
 
-Operation::Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish, const bool& isGlobal)
-                                        : identifier(identifier), steady(steady), autoPublish(autoPublish){
+Operation::Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish, const bool& isGlobal )
+                                        : identifier(identifier), steady(steady), autoPublish(autoPublish), isGlobal(isGlobal){
     
     
 
@@ -23,6 +23,7 @@ Operation::Operation(const OperationIdentifier& identifier, const bool& steady, 
     setpoint.coordinate_frame = mavros_msgs::PositionTarget::FRAME_LOCAL_NED;
     rate_int = (int) Fluid::getInstance().configuration.refresh_rate;
     twist_subscriber = node_handle.subscribe("mavros/local_position/velocity_local", 1, &Operation::twistCallback, this);
+
 
 
 }

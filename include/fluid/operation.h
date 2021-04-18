@@ -24,7 +24,7 @@
 class Operation {
    private:
 
-    const bool& isGlobal = 0; // Is operation Global
+
 
     /**
      * @brief Gets the current pose.
@@ -100,11 +100,14 @@ class Operation {
 
    protected:
 
+    const bool& isGlobal; // Is operation Global
+
     /**
      * @brief Rate at which the operation is run
      *
      */
     int rate_int;
+
 
     /**
      * @brief Publishes setpoints.
@@ -192,7 +195,7 @@ class Operation {
      * consequences.
      * @param should_publish_setpoints Allow to prevent the operation publishing position setpoins
      */
-    Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish);
+    Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish, const bool& isGlobal=false);
 
     /**
      * @brief Performs the loop for executing logic within this operation.

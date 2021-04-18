@@ -24,7 +24,7 @@ class HoldOperation : public Operation {
     bool hasFinishedExecution() const override;
 
     /**
-     * @brief Sets up the setpoint to the current position.
+     * @brief Sets up the setpoint to the current position.    
      */
     void initialize() override;
 };
