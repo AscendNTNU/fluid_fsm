@@ -51,7 +51,7 @@ bool Fluid::travel(fluid::Travel::Request& request, fluid::Travel::Response& res
     Response attempt_response =
         attemptToCreateOperation(OperationIdentifier::TRAVEL,
                                  {std::make_shared<TravelOperation>(request.path), std::make_shared<HoldOperation>()});
-
+    
     response.message = attempt_response.message;
     response.success = attempt_response.success;
     return true;
@@ -93,8 +93,8 @@ Fluid::Response Fluid::attemptToCreateOperation(const OperationIdentifier& targe
     response.success = isValidOperation(current_operation_identifier, target_operation_identifier);
 
     if (!response.success) {
-        response.message = "Cannot transition to " + getStringFromOperationIdentifier(target_operation_identifier) +
-                           " from " + getStringFromOperationIdentifier(current_operation_identifier);
+        response.message = "Cannot transition to " + getStringFromOperationIdentifier(target_operation_identifier) + 
+                " from " + getStringFromOperationIdentifier(current_operation_identifier);
         return response;
     } else {
         ROS_INFO_STREAM(ros::this_node::getName().c_str()
@@ -188,7 +188,7 @@ void Fluid::run() {
         // If we are at the steady operation, we call the completion service
         if (operation_execution_queue.empty() && !has_called_completion) {
             fluid::OperationCompletion operation_completion;
-            operation_completion.request.operation = current_operation;
+            operation_completion.request.operation = current_operation + " (" + std::to_string(current_operation_ptr->getOperationTag()) + ")";
             operation_completion_client.call(operation_completion);
             has_called_completion = true;
         }

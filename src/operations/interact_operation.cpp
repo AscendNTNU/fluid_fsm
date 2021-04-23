@@ -66,7 +66,7 @@ void InteractOperation::initialize() {
         K_LQR_X[i] = temp[2*i];
         K_LQR_Y[i] = temp[2*i+1];
     }
-    EKF = Fluid::getInstance().configuration.ekf;
+    //EKF = Fluid::getInstance().configuration.ekf;
     SHOW_PRINTS = Fluid::getInstance().configuration.interaction_show_prints;
     GROUND_TRUTH = Fluid::getInstance().configuration.interaction_ground_truth;
     MAX_ACCEL = Fluid::getInstance().configuration.interact_max_acc;
@@ -137,7 +137,7 @@ void InteractOperation::modulePoseCallback(
 
 void InteractOperation::FaceHuggerCallback(const bool released){
     if (released){
-        ROS_INFO_STREAM(ros::this_node::getName().c_str() << "CONGRATULATION, FaceHugger set on the mast! We can now exit the mast");
+        ROS_INFO_STREAM(ros::this_node::getName().c_str() << "CONGRATULATIONS! FaceHugger is now set on the mast! We can now exit the mast");
         interaction_state =  InteractionState::EXIT;
         faceHugger_is_set = true;
     }

@@ -4,14 +4,12 @@
  * @brief Implementation of the Mavros Interface.
  */
 
-#include "mavros_interface.h"
-
+#include <mavros_interface.h>
 #include <mavros_msgs/CommandBool.h>
 #include <mavros_msgs/CommandTOL.h>
 #include <mavros_msgs/ParamSet.h>
 #include <mavros_msgs/PositionTarget.h>
-
-#include "type_mask.h"
+#include <type_mask.h>
 
 MavrosInterface::MavrosInterface() {
     ros::NodeHandle node_handle;

@@ -74,7 +74,21 @@ class Operation {
      */
     bool autoPublish;
 
+
    protected:
+
+   /**
+    * @brief Total operation count
+    * 
+    */
+   static unsigned long int operation_total;
+
+   /**
+    * @brief Operation ID
+    * 
+    */
+    
+   const unsigned long int operation_tag = ++operation_total;
 
     /**
      * @brief Rate at which the operation is run
@@ -153,6 +167,18 @@ class Operation {
      * @brief The identifier for this operation.
      */
     const OperationIdentifier identifier;
+
+    /**
+     * @brief Get operation tag
+     * 
+     */
+    const unsigned long int& getOperationTag(){return operation_tag;};
+
+    /**
+     * @brief Get total operation count
+     * 
+     */
+    unsigned long int* getOperationTotalPtr(){return &operation_total;};
 
     /**
      * @brief Constructs a new operation.

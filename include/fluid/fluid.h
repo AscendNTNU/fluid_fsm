@@ -138,6 +138,11 @@ class Fluid {
          * @brief Error messsage (if any)
          */
         std::string message;
+        /**
+         * @brief Operation tag
+         * 
+         */
+        unsigned int tag;
     };
 
     /**
@@ -296,7 +301,7 @@ class Fluid {
     std::shared_ptr<StatusPublisher> getStatusPublisherPtr();
 
     /**
-     * @brief Runs the operation macine.
+     * @brief Runs the operation machine.
      */
     void run();
 };

@@ -11,6 +11,11 @@
 #include "fluid.h"
 #include "util.h"
 
+
+
+unsigned long int Operation::operation_total = 0;
+    
+
 Operation::Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish)
                                         : identifier(identifier), steady(steady), autoPublish(autoPublish){
     pose_subscriber = node_handle.subscribe("mavros/local_position/pose", 1, &Operation::poseCallback, this);
@@ -20,6 +25,9 @@ Operation::Operation(const OperationIdentifier& identifier, const bool& steady, 
     setpoint_publisher = node_handle.advertise<mavros_msgs::PositionTarget>("mavros/setpoint_raw/local", 10);
     setpoint.coordinate_frame = mavros_msgs::PositionTarget::FRAME_LOCAL_NED;
     rate_int = (int) Fluid::getInstance().configuration.refresh_rate;
+
+    
+
 }
 
 
