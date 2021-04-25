@@ -19,7 +19,7 @@ Operation::Operation(const OperationIdentifier& identifier, const bool& steady, 
     global_pose_subscriber = node_handle.subscribe("mavros/global_position/global", 1, &Operation::globalPoseCallback, this);
     pose_subscriber = node_handle.subscribe("mavros/global_position/local", 1, &Operation::poseCallback, this);
     setpoint_publisher = node_handle.advertise<mavros_msgs::PositionTarget>("mavros/setpoint_raw/local", 10);
-    global_setpoint_publisher = node_handle.advertise<mavros_msgs::PositionTarget>("mavros/setpoint_raw/local",10);
+    global_setpoint_publisher = node_handle.advertise<mavros_msgs::GlobalPositionTarget>("mavros/setpoint_raw/global", 10);
     setpoint.coordinate_frame = mavros_msgs::PositionTarget::FRAME_LOCAL_NED;
     rate_int = (int) Fluid::getInstance().configuration.refresh_rate;
     twist_subscriber = node_handle.subscribe("mavros/local_position/velocity_local", 1, &Operation::twistCallback, this);
@@ -31,7 +31,7 @@ Operation::Operation(const OperationIdentifier& identifier, const bool& steady, 
 
 geometry_msgs::PoseStamped Operation::getCurrentPose() const { return current_pose; }
 
-sensor_msgs::NavSatFix Operation::getGlobalPose() const { return global_current_pose; }
+sensor_msgs::NavSatFix Operation::getGlobalPose() const { return current_global_pose; }
 
 void Operation::poseCallback(const geometry_msgs::PoseStampedConstPtr pose) {
     current_pose.pose = pose->pose;
@@ -39,7 +39,14 @@ void Operation::poseCallback(const geometry_msgs::PoseStampedConstPtr pose) {
     current_accel = orientation_to_acceleration(pose->pose.orientation);
 }
 
-void Operation::globalPoseCallback(const sensor_msgs::NavSatFix global_pose_t){ global_current_pose = global_pose_t;}
+void Operation::globalPoseCallback(const sensor_msgs::NavSatFix pose) {
+    current_global_pose.header = pose.header;
+    current_global_pose.latitude = pose.latitude;
+    current_global_pose.longitude = pose.longitude;
+    current_global_pose.altitude = pose.altitude;
+    current_global_pose.status = pose.status;
+    current_global_pose.position_covariance = pose.position_covariance;
+}
 
 
 geometry_msgs::TwistStamped Operation::getCurrentTwist() const { return current_twist; }
@@ -49,6 +56,7 @@ void Operation::twistCallback(const geometry_msgs::TwistStampedConstPtr twist) {
     current_twist.twist = twist->twist;
     current_twist.header = twist->header;
 }
+
 
 geometry_msgs::Vector3 Operation::getCurrentAccel() const { return current_accel; }
 
@@ -94,11 +102,12 @@ void Operation::perform(std::function<bool(void)> should_tick, bool should_halt_
         tick();
         if (autoPublish)
             publishSetpoint();
-        Fluid::getInstance().getStatusPublisherPtr()->status.setpoint.x = setpoint.position.x;
-        Fluid::getInstance().getStatusPublisherPtr()->status.setpoint.y = setpoint.position.y;
-        Fluid::getInstance().getStatusPublisherPtr()->status.setpoint.z = setpoint.position.z;
-        Fluid::getInstance().getStatusPublisherPtr()->publish();
-        ros::spinOnce();
-        rate.sleep();
-    } while (ros::ok() && ((should_halt_if_steady && steady) || !hasFinishedExecution()) && should_tick());
+            Fluid::getInstance().getStatusPublisherPtr()->status.setpoint.x = setpoint.position.x;
+            Fluid::getInstance().getStatusPublisherPtr()->status.setpoint.y = setpoint.position.y;
+            Fluid::getInstance().getStatusPublisherPtr()->status.setpoint.z = setpoint.position.z;
+            Fluid::getInstance().getStatusPublisherPtr()->publish();
+            ros::spinOnce();
+            rate.sleep();
+    } 
+    while (ros::ok() && ((should_halt_if_steady && steady) || !hasFinishedExecution()) && should_tick());
 }

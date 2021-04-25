@@ -8,7 +8,8 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TwistStamped.h>
 #include <mavros_msgs/PositionTarget.h>
-#include <sensor_msgs/NavSatFix.h> //Global msg type
+#include <mavros_msgs/GlobalPositionTarget.h>
+#include <sensor_msgs/NavSatFix.h>
 #include <ros/ros.h>
 
 #include <memory>
@@ -46,7 +47,7 @@ class Operation {
     geometry_msgs::PoseStamped current_pose;
 
     //Current global pose
-    sensor_msgs::NavSatFix global_current_pose;
+    sensor_msgs::NavSatFix current_global_pose;
     
     
 
@@ -61,7 +62,7 @@ class Operation {
      */
     void poseCallback(const geometry_msgs::PoseStampedConstPtr pose);
 
-    void globalPoseCallback(sensor_msgs::NavSatFix global_pose_t);
+    void globalPoseCallback(const sensor_msgs::NavSatFix pose);
 
     /**
      * @brief Gets the current twist.
@@ -100,7 +101,6 @@ class Operation {
 
    protected:
 
-    const bool& isGlobal; // Is operation Global
 
     /**
      * @brief Rate at which the operation is run
@@ -126,7 +126,7 @@ class Operation {
      * @brief The setpoint.
      */
     mavros_msgs::PositionTarget setpoint;
-    mavros_msgs::PositionTarget global_setpoint;
+    mavros_msgs::GlobalPositionTarget global_setpoint;
 
     /**
      * @brief Publishes the setpoint.
@@ -187,6 +187,8 @@ class Operation {
      */
     const OperationIdentifier identifier;
 
+    const bool& isGlobal; // Is operation Global
+
     /**
      * @brief Constructs a new operation.
      *
@@ -195,7 +197,7 @@ class Operation {
      * consequences.
      * @param should_publish_setpoints Allow to prevent the operation publishing position setpoins
      */
-    Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish, const bool& isGlobal=false);
+    Operation(const OperationIdentifier& identifier, const bool& steady, const bool& autoPublish, const bool& isGlobal = 0);
 
     /**
      * @brief Performs the loop for executing logic within this operation.
