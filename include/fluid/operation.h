@@ -84,11 +84,11 @@ class Operation {
    static unsigned long int operation_total;
 
    /**
-    * @brief Operation ID
+    * @brief Operation tag
     * 
     */
     
-   const unsigned long int operation_tag = ++operation_total;
+   const unsigned long int operation_tag;
 
     /**
      * @brief Rate at which the operation is run
@@ -174,11 +174,6 @@ class Operation {
      */
     const unsigned long int& getOperationTag(){return operation_tag;};
 
-    /**
-     * @brief Get total operation count
-     * 
-     */
-    unsigned long int* getOperationTotalPtr(){return &operation_total;};
 
     /**
      * @brief Constructs a new operation.
