@@ -188,7 +188,8 @@ void Fluid::run() {
         // If we are at the steady operation, we call the completion service
         if (operation_execution_queue.empty() && !has_called_completion) {
             fluid::OperationCompletion operation_completion;
-            operation_completion.request.operation = current_operation + " (" + std::to_string(current_operation_ptr->getOperationTag()) + ")";
+            operation_completion.request.operation = current_operation;
+            operation_completion.request.tag = current_operation_ptr->getOperationTag();
             operation_completion_client.call(operation_completion);
             has_called_completion = true;
         }
