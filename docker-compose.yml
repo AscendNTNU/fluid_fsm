@@ -1,0 +1,6 @@
+version: "3"
+services:
+        fluid:
+                build: .
+                image: ghcr.io/ascendntnu/fluid
+                network_mode: "host"
